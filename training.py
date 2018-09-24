@@ -34,10 +34,10 @@ def main():
 
     train('MNIST','ffn',32)
 
+#takes the full filepath and name e.g. ./models/Model.ffn512.01-0.5500.hdf5
+def save_weights(filepath_name):
 
-def save_weights(load_name):
-
-    model = load_model(load_name)
+    model = load_model(filepath_name)
     i=1
     for layer in model.layers:
         if (layer.get_config()["name"].startswith("dense")):
@@ -46,6 +46,7 @@ def save_weights(load_name):
             np.savetxt("weights_%s.csv"%str(i),weights[0], delimiter=",")
             i=i+1
 
+# this returns the layer names and number of hidden neurons for each
 def summary(load_name):
     model = load_model(load_name)
     print(model.summary())
@@ -53,6 +54,23 @@ def summary(load_name):
         if (layer.get_config()["name"].startswith("dense")):
             print(layer.get_config()['name'],':',layer.get_config()['units'])
 
+# This function does predictions on a trained model taking an input matrix x_test
+# If provided with a y_test vector, it will also print a vector of the incorrect predictions
+
+def predict(filepath_name,X_test,y_test=None):
+
+    model = keras.models.load_model(load_name)
+    predictions = model.predict(X_test, batch_size=None, verbose=0, steps=None)
+    if y_test!=None:
+        incorrect_classes = np.nonzero(predictions != y_test)
+        print(incorrect_classes)
+    return predictions
+
+# This function is for training an ANN/DSF model
+# Dataset = 'MNIST', 'MATH' (HASYv2) or 'REUT'
+# model_type = 'dsf' or 'ffn'
+# hidden_neurons1 is hidden neurons in the first hidden layer
+# hidden_neurons2 (optional) is hidden neurons in the second hidden layer
 
 def train(dataset, model_type, hidden_neurons1, hidden_neurons2=None):
     depth = 1
@@ -65,11 +83,6 @@ def train(dataset, model_type, hidden_neurons1, hidden_neurons2=None):
     else:
         layers = 1
 
-    # TRAIN, TEST or SAVE
-    # mode = 'SAVE'
-    # dataset = 'REUT'
-    # load_name = 'Model.ffn512.01-0.5500.hdf5'
-
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # ~~~~~~~~~~~~~~~~~~~~~~~~ DEAL WITH THE DATA ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -80,8 +93,6 @@ def train(dataset, model_type, hidden_neurons1, hidden_neurons2=None):
         classes = 10
         (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-
-            # val_row = int(X_train.shape[0] * 0.8)
 
     if dataset == 'REUT':
         width =5000
@@ -155,28 +166,6 @@ def train(dataset, model_type, hidden_neurons1, hidden_neurons2=None):
     our_model.fit_generator(generate.flow(X_train, y_train), steps_per_epoch = X_train.shape[0], epochs=epochs,
                             validation_data = (X_test,y_test), callbacks = [ckpt,stop])
 
-    # test run on the test classes
-    # if mode == 'TEST':
-    #     model = keras.models.load_model(load_name)
-    #     incorrect_classes = np.nonzero(model.predict(X_test, batch_size=None, verbose=0, steps=None) != y_test)
-    #     print(incorrect_classes)
-    #
-    # if mode == 'SAVE':
-    #     model = load_model(load_name)
-    #     i=1
-    #     for layer in model.layers:
-    #         if (layer.get_config()["name"].startswith("dense")):
-    #             weights = layer.get_weights() # list of numpy arrays
-    #             print('weights dimensions: ',len(weights[0]),'x',len(weights[0][0]))
-    #             np.savetxt("weights_mathffn512_%s.csv"%str(i),weights[0], delimiter=",")
-    #             i=i+1
-    #
-    # if mode == 'SUMMARY':
-    #     model = load_model(load_name)
-    #     print(model.summary())
-    #     for layer in model.layers:
-    #         if (layer.get_config()["name"].startswith("dense")):
-    #             print(layer.get_config()['name'],':',layer.get_config()['units'])
 
 if __name__ == "__main__":
     main()

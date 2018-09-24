@@ -178,13 +178,13 @@ def graph_report(size, offset, w1, w2 = None):
     i = 0
     for sub in ax:
         # for subi in sub:
-        p_m.plot(size,sub[0],b,a,w1[:,i+offset])
+        plot(size,sub[0],b,a,w1[:,i+offset])
         if i==0:
             sub[0].set_title("DSF")
-        p_m.plot(size,sub[1],b,a,w2[:,i+offset],min=-1)
+        plot(size,sub[1],b,a,w2[:,i+offset],min=-1)
         if i==0:
             sub[1].set_title("ANN")
-        p_m.plot(size,sub[2],b,a,w2[:,i+offset])
+        plot(size,sub[2],b,a,w2[:,i+offset])
         if i==0:
             sub[2].set_title("NN-ANN")
         sub[1].get_xaxis().set_visible(False)
@@ -199,7 +199,7 @@ def graph_report(size, offset, w1, w2 = None):
 # This function produces (and optionally saves) the mean and covariance matrix of a single weight image.
 def run_metrics(save_covariance, run_metrics, w1):
 
-    mean, cov = p_m.metrics(w1)
+    mean, cov = metrics(w1)
 
     if (save_covariance==True):
         np.savetxt("cov.csv", cov, delimiter=",")
@@ -235,7 +235,7 @@ def graph_components(size, offset, w1, w2 = None):
     i = 0
     for sub in ax:
         for subi in sub:
-            p_m.plot(size,subi,b,a,w1[:,i+offset])
+            plot(size,subi,b,a,w1[:,i+offset])
             subi.get_xaxis().set_visible(False)
             subi.get_yaxis().set_visible(False)
             i=i+1
