@@ -8,9 +8,10 @@ import matplotlib.mlab as mlab
 from scipy.stats import lognorm
 from scipy.stats import expon
 
-# This file contains all the helper functions for graphing and producing statistics
-# of the image properties
-
+# This file is a library of graphing functions for dealing with weight matrices.
+# It contains graphing functions as well as helper functions, and can also calculate
+# matrix means and covariances.
+# =====================================================================================
 
 #  This function plots a single image as a heatmap of a matrix.
 #  It is called within loops for graphing multiple neurons.
@@ -78,7 +79,7 @@ def entropy(w):
 
     return entropy
 
-# This calculates bins the values of a matrix into 100 bins, and calculates the resulting
+# This bins the values of a matrix into 100 bins, and calculates the resulting
 # Shannon entropy
 def bin_total_entropy(w):
 
