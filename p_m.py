@@ -159,7 +159,7 @@ def metrics(weights):
     return mean, cov
 
 # This graphing function produces the image weights (DSF, ANN, NN-ANN) all side by side for use in the report.
-def graph_report(size, offset, w1, w2 = None):
+def graph_report(neurons,size, offset, w1, w2 = None):
 
     if(w2 is None):
         print('Error: No w2 matrix!')
@@ -177,6 +177,7 @@ def graph_report(size, offset, w1, w2 = None):
     b = np.linspace(1, size,size)
     a, b = np.meshgrid(a,b)
     i = 0
+    j = 0
     for sub in ax:
         # for subi in sub:
         plot(size,sub[0],b,a,w1[:,i+offset])
@@ -190,12 +191,20 @@ def graph_report(size, offset, w1, w2 = None):
             sub[2].set_title("NN-ANN")
         sub[1].get_xaxis().set_visible(False)
         sub[1].get_yaxis().set_visible(False)
+        sub[1].set_aspect('equal')
         sub[0].get_xaxis().set_visible(False)
         sub[0].get_yaxis().set_visible(False)
+        sub[0].set_aspect('equal')
+        sub[0].set_ylabel(str(i))
+        # sub[0].yaxis.set_label_coords(-0.1,1.02)
         sub[2].get_xaxis().set_visible(False)
         sub[2].get_yaxis().set_visible(False)
+        sub[2].set_aspect('equal')
         i=i+1
-    plt.show()
+    # plt.show()
+    plt.subplots_adjust(left=0.125, bottom=0.1, right=0.4, top=0.9,
+                wspace=0.1, hspace=0.1)
+    plt.savefig('./mnist_'+str(neurons)+'_'+str(offset/8)+'.png')
 
 # This function produces (and optionally saves) the mean and covariance matrix of a single weight image.
 def run_metrics(save_covariance, run_metrics, w1):
