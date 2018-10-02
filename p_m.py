@@ -204,7 +204,7 @@ def graph_report(neurons,size, offset, w1, w2 = None):
     # plt.show()
     plt.subplots_adjust(left=0.125, bottom=0.1, right=0.4, top=0.9,
                 wspace=0.1, hspace=0.1)
-    plt.savefig('./mnist_'+str(neurons)+'_'+str(offset/8)+'.png')
+    plt.savefig('./'+str(neurons)+'_'+str(offset/8)+'.eps',format = 'eps')
 
 # This function produces (and optionally saves) the mean and covariance matrix of a single weight image.
 def run_metrics(save_covariance, run_metrics, w1):
